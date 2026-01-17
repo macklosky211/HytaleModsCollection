@@ -1,6 +1,5 @@
 package com.katsi.rewardbox.events;
 
-import java.util.UUID;
 import java.util.logging.Level;
 
 import com.hypixel.hytale.event.IEvent;

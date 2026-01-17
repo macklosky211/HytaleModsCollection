@@ -18,7 +18,6 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.katsi.rewardbox.BoxRollManager;
-import com.katsi.rewardbox.GlobalRewardBox;
 import com.katsi.rewardbox.events.GrantRollEvent;
 
 public class grantItemRoll extends AbstractCommand {
