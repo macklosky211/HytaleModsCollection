@@ -1,0 +1,19 @@
+{
+  "Group": "Katsi",
+  "Name": "RewardBoxes",
+  "Version": "1.0.0",
+  "Description": "A mod that allows players and other modders to add loot-box like features to their worlds.",
+  "Authors": [
+    {
+      "Name": "Katsi",
+      "Email": "theblackcatgang@gmail.com",
+      "Url": "https://legacy.curseforge.com/hytale/mods/rewardboxes"
+    }
+  ],
+  "Website": "https://legacy.curseforge.com/hytale/mods/rewardboxes",
+  "Main": "com.katsi.rewardbox.Main",
+  "ServerVersion": "*",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false
+}
