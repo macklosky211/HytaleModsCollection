@@ -40,6 +40,8 @@ public class RemoveBox extends AbstractCommand {
 
         global_boxes.getRewardBoxes().removeIf(reward_box -> reward_box.box_name.equals(reward_box_name));
 
+        GlobalRewardBox.save();
+
         if (current_size > global_boxes.getRewardBoxes().size()) {
             context.sender().sendMessage(Message.raw(String.format("Successfully removed RewardBoxes with name '%s'", reward_box_name)));
         } else {
