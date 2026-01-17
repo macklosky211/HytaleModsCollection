@@ -10,11 +10,12 @@ public class CommandGroup extends AbstractCommandCollection {
         super("RewardBox", "Commands related to creating a rewardbox");
         addAliases("rb");
 
-        addSubCommand(new CreateBox());
-        addSubCommand(new AddItem());
-        addSubCommand(new RemoveItem());
         addSubCommand(new RollBox());
         addSubCommand(new ListBoxes());
+        addSubCommand(new CreateBox());
+        addSubCommand(new RemoveBox());
+        addSubCommand(new AddItem());
+        addSubCommand(new RemoveItem());
         addSubCommand(new grantItemRoll());
     }
     

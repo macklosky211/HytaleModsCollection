@@ -6,6 +6,8 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.hypixel.hytale.event.IEventDispatcher;
+import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.NameMatching;
 import com.hypixel.hytale.server.core.command.system.AbstractCommand;
@@ -17,6 +19,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.katsi.rewardbox.BoxRollManager;
 import com.katsi.rewardbox.GlobalRewardBox;
+import com.katsi.rewardbox.events.ConsumeRollEvent;
 
 public class grantItemRoll extends AbstractCommand {
 
@@ -44,10 +47,10 @@ public class grantItemRoll extends AbstractCommand {
         String reward_box_id = reward_box_name_arg.get(context);
         Integer value = increment_value_arg.get(context);
         
-        if (GlobalRewardBox.getRewardBox(reward_box_id) == null) {
-            context.sender().sendMessage(Message.raw(String.format("[ERROR] Could not find any RewardBoxes with id '%s'", reward_box_id)));
-            return CompletableFuture.completedFuture(null);
-        }
+        // if (GlobalRewardBox.getRewardBox(reward_box_id) == null) {
+        //     context.sender().sendMessage(Message.raw(String.format("[ERROR] Could not find any RewardBoxes with id '%s'", reward_box_id)));
+        //     return CompletableFuture.completedFuture(null);
+        // }
 
 
         PlayerRef target_playerRef = Universe.get().getPlayerByUsername(player_name, NameMatching.DEFAULT);
@@ -58,12 +61,19 @@ public class grantItemRoll extends AbstractCommand {
 
         // Player target_player = target_playerRef.getHolder().getComponent(Player.getComponentType());
 
-        UUID uuid = target_playerRef.getUuid();
+        IEventDispatcher<ConsumeRollEvent, ConsumeRollEvent> dispatcher = HytaleServer.get().getEventBus().dispatchFor(ConsumeRollEvent.class);
+        
+        if (dispatcher.hasListener()) {
+            ConsumeRollEvent event = new ConsumeRollEvent(target_playerRef, reward_box_id);
+            dispatcher.dispatch(event);
+        }
 
-        BoxRollManager.get().incrementRolls(uuid, reward_box_id, value);
+        // BoxRollManager.get().incrementRolls(uuid, reward_box_id, value);
+        UUID uuid = target_playerRef.getUuid();
+        
         int total_rolls = BoxRollManager.get().getRolls(uuid, reward_box_id);
 
-        Message m = Message.raw(String.format("Total rolls for '%s' set to 'x%d' for RewardBox '%s'", target_playerRef.getUsername(), total_rolls, reward_box_id));
+        Message m = Message.raw(String.format("Total rolls for '%s' increased to 'x%d' for RewardBox '%s'", target_playerRef.getUsername(), total_rolls, reward_box_id));
         
         context.sender().sendMessage(m);
         if (uuid != context.sender().getUuid()) {

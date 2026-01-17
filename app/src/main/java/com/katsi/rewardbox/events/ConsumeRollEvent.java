@@ -75,7 +75,6 @@ public class ConsumeRollEvent implements IEvent<Void> {
             return;
         }
 
-
         if (!brm.hasRoll(uuid, reward_box_id)) {
             target_playerRef.sendMessage(Message.raw(String.format("Failed to consume roll due to not having any keys for RewardBox '%s'", reward_box_id)));
             return;
@@ -114,13 +113,13 @@ public class ConsumeRollEvent implements IEvent<Void> {
                 return;
             }
 
+            String item_display_name = String.format("%s", random_item.getItemID().replaceAll("_", " "));
+
             ItemStack remaining_items = inventory
                 .addItemStack(new ItemStack(random_item.getItemID(), random_item.getQuantity()))
                 .getRemainder();
         
-            if (remaining_items == null || remaining_items.isEmpty()) {
-                continue;
-            } else {
+            if (remaining_items != null && !remaining_items.isEmpty()) {
                 Holder<EntityStore> holder = ItemComponent.generateItemDrop(store, remaining_items, transform.getPosition(), transform.getRotation(), 0f, 0f, 0f);
                 if (holder != null) {
                     ItemComponent item_component = holder.getComponent(ItemComponent.getComponentType());
@@ -128,17 +127,20 @@ public class ConsumeRollEvent implements IEvent<Void> {
                         item_component.setPickupDelay(1.5f);
                     }
                     
-                    String item_display_name = String.format("%s x%d", random_item.getItemID().replaceAll("_", " "), remaining_items.getQuantity());
+                    
 
                     holder.addComponent(Nameplate.getComponentType(), new Nameplate(item_display_name));
 
                     store.addEntity(holder, AddReason.SPAWN);
                 }
             }
+
+            target_playerRef.sendMessage(Message.raw(String.format(" - Recieved: '%s' x%d", item_display_name, random_item.getQuantity())));
+
+            HytaleLogger.getLogger().at(Level.INFO).log(String.format("%s pulled item '%s'x%d from box '%s'", target_playerRef.getUsername(), random_item.getItemID(), event.getQuantity(), event.getRewardBoxID()));
         }
 
         BoxRollManager.save();
 
-        HytaleLogger.getLogger().at(Level.INFO).log("Consume roll event triggered: ", event.getSender().getUsername(), event.getRewardBoxID(), event.getQuantity() );
     }
 }

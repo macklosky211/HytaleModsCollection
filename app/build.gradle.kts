@@ -4,9 +4,9 @@ plugins {
     id("com.gradleup.shadow") version "9.3.1"
 }
 
-group = findProperty("pluginGroup") as String? ?: "com.example"
-version = findProperty("pluginVersion") as String? ?: "1.0.0"
-description = findProperty("pluginDescription") as String? ?: "A Hytale plugin template"
+group = findProperty("Group") as String? ?: "com.example"
+version = findProperty("Version") as String? ?: "1.0.0"
+description = findProperty("Description") as String? ?: "A Hytale plugin template"
 
 repositories {
     mavenLocal()

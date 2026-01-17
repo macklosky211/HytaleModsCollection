@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import com.hypixel.hytale.event.IEvent;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.katsi.rewardbox.BoxRollManager;
 import com.katsi.rewardbox.GlobalRewardBox;
@@ -46,6 +47,7 @@ public class GrantRollEvent implements IEvent<Void> {
 
         if (GlobalRewardBox.getRewardBox(event.getRewardBoxID()) == null) {
             HytaleLogger.getLogger().at(Level.WARNING).log("Failed to find RewardBox with name: ", event.getRewardBoxID());
+            event.getSender().sendMessage(Message.raw(String.format("Attempted to grant key for box '%s' but the targetted box could not be found.", event.getRewardBoxID())));
             return;
         }
 
@@ -63,8 +65,10 @@ public class GrantRollEvent implements IEvent<Void> {
             }
         }
 
+        event.getSender().sendMessage(Message.raw(String.format("Recieved x%d keys for RewardBox '%s'", event.getQuantity(), event.getRewardBoxID())));
+
         BoxRollManager.save();
 
-        HytaleLogger.getLogger().at(Level.INFO).log("Granted roll event triggered: ", event.getSender().getUsername(), event.getRewardBoxID(), event.getQuantity() );
+        HytaleLogger.getLogger().at(Level.INFO).log(String.format("%s recieved x%d keys for RewardBox '%s'", event.getSender().getUsername(), event.getQuantity(), event.getRewardBoxID()) );
     }
 }
