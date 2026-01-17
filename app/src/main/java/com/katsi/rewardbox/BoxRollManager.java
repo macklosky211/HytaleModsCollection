@@ -15,11 +15,11 @@ import com.hypixel.hytale.logger.HytaleLogger;
 public class BoxRollManager {
     public static BoxRollManager instance;
 
-    HashMap<UUID, HashMap<String, Integer>> roll_access_table;
+    HashMap<String, HashMap<String, Integer>> roll_access_table;
 
     protected BoxRollManager() {
         instance = this;
-        roll_access_table = new HashMap<UUID, HashMap<String, Integer>>(1);
+        roll_access_table = new HashMap<String, HashMap<String, Integer>>(1);
     }
 
 
@@ -27,7 +27,7 @@ public class BoxRollManager {
         return instance;
     }
 
-    public static HashMap<UUID, HashMap<String, Integer>> getRollAccessTable() {
+    public static HashMap<String, HashMap<String, Integer>> getRollAccessTable() {
         return instance.roll_access_table;
     }
 
@@ -69,7 +69,7 @@ public class BoxRollManager {
         return new File("./config/KatsiLib/RewardBoxesRollTable.json").exists();
     }
 
-    public boolean hasRoll(UUID uuid, String reward_box_name) {
+    public boolean hasRoll(String uuid, String reward_box_name) {
         if (this.roll_access_table.containsKey(uuid)){
             return this.roll_access_table.get(uuid).containsKey(reward_box_name);
         } else {
@@ -77,11 +77,11 @@ public class BoxRollManager {
         }
     }
 
-    public boolean hasAnyRolls(UUID uuid) {
+    public boolean hasAnyRolls(String uuid) {
         return this.roll_access_table.containsKey(uuid);
     }
 
-    public int getRolls(UUID uuid, String reward_box_name) {
+    public int getRolls(String uuid, String reward_box_name) {
         if (!this.hasRoll(uuid, reward_box_name)) {
             return 0;
         } else {
@@ -89,7 +89,7 @@ public class BoxRollManager {
         }
     }
 
-    public void setRolls(UUID uuid, String reward_box_name, int value) {
+    public void setRolls(String uuid, String reward_box_name, int value) {
         if (value <= 0) {
             if (this.roll_access_table.containsKey(uuid)) {
                 HashMap<String, Integer> reward_map = this.roll_access_table.get(uuid);
@@ -117,11 +117,11 @@ public class BoxRollManager {
      * Increments the number of availible rolls by 1.
      * If the box didnt have any assosiated rolls then its set to 1.
      */
-    public void incrementRolls(UUID uuid, String reward_box_name) {
+    public void incrementRolls(String uuid, String reward_box_name) {
         this.incrementRolls(uuid, reward_box_name, 1);
     }
 
-    public void incrementRolls(UUID uuid, String reward_box_name, int value) {
+    public void incrementRolls(String uuid, String reward_box_name, int value) {
         HashMap<String, Integer> reward_map = this.assertUUIDMap(uuid);
         if (reward_map.containsKey(reward_box_name)) {
             reward_map.replace(reward_box_name, reward_map.get(reward_box_name) + Integer.valueOf(value));
@@ -130,11 +130,12 @@ public class BoxRollManager {
         }
     }
 
-    public void decrementRolls(UUID uuid, String reward_box_name) {
+    public void decrementRolls(String uuid, String reward_box_name) {
         this.decrementRolls(uuid, reward_box_name, 1);
     }
     
-    public void decrementRolls(UUID uuid, String reward_box_name, int value) {
+    public void decrementRolls(String uuid, String reward_box_name, int value) {
+
         if (!this.roll_access_table.containsKey(uuid)) return;
         HashMap<String, Integer> reward_map = this.roll_access_table.get(uuid);
         if (!reward_map.containsKey(reward_box_name)) return;
@@ -155,7 +156,7 @@ public class BoxRollManager {
     /**
      * Creates a UUID map for the specified uuid. If it already existed then it returns the existing object.
      */
-    protected HashMap<String, Integer> assertUUIDMap(UUID uuid) {
+    protected HashMap<String, Integer> assertUUIDMap(String uuid) {
         if (!this.roll_access_table.containsKey(uuid)) {
             HashMap<String, Integer> new_reward_map = new HashMap<String, Integer>(1);
 
@@ -165,4 +166,5 @@ public class BoxRollManager {
             return this.roll_access_table.get(uuid);
         }
     }
+
 }

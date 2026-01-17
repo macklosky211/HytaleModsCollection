@@ -64,7 +64,7 @@ public class grantItemRoll extends AbstractCommand {
         // BoxRollManager.get().incrementRolls(uuid, reward_box_id, value);
         UUID uuid = target_playerRef.getUuid();
         
-        int total_rolls = BoxRollManager.get().getRolls(uuid, reward_box_id);
+        int total_rolls = BoxRollManager.get().getRolls(uuid.toString(), reward_box_id);
 
         Message m = Message.raw(String.format("Total rolls for '%s' increased to 'x%d' for RewardBox '%s'", target_playerRef.getUsername(), total_rolls, reward_box_id));
         

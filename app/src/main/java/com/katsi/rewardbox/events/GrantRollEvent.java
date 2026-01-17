@@ -52,14 +52,8 @@ public class GrantRollEvent implements IEvent<Void> {
         }
 
         BoxRollManager brm = BoxRollManager.get();
-        UUID uuid = event.getSender().getUuid();
-        if (event.getQuantity() == 1) {
-            brm.incrementRolls(uuid, event.getRewardBoxID());
-        } else {
-            
-            brm.incrementRolls(uuid, event.getRewardBoxID(), event.getQuantity());
-            
-        }
+        String uuid_string = event.getSender().getUuid().toString();
+        brm.incrementRolls(uuid_string, event.getRewardBoxID(), event.getQuantity());
 
         event.getSender().sendMessage(Message.raw(String.format("Recieved x%d keys for RewardBox '%s'", event.getQuantity(), event.getRewardBoxID())));
 

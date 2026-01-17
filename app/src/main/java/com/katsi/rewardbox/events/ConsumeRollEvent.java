@@ -67,7 +67,7 @@ public class ConsumeRollEvent implements IEvent<Void> {
             event.getSender().sendMessage(Message.raw(String.format("[ERROR] Could not find player '%s'", event.getSender().getUsername())));
             return;
         }
-        UUID uuid = target_playerRef.getUuid();
+        String uuid_string = target_playerRef.getUuid().toString();
 
         RewardBox reward_box = GlobalRewardBox.getRewardBox(reward_box_id);
         if ( reward_box == null) {
@@ -75,7 +75,7 @@ public class ConsumeRollEvent implements IEvent<Void> {
             return;
         }
 
-        if (!brm.hasRoll(uuid, reward_box_id)) {
+        if (!brm.hasRoll(uuid_string, reward_box_id)) {
             target_playerRef.sendMessage(Message.raw(String.format("Failed to consume roll due to not having any keys for RewardBox '%s'", reward_box_id)));
             return;
         }
@@ -92,7 +92,7 @@ public class ConsumeRollEvent implements IEvent<Void> {
         
         int total_rolls = event.getQuantity();
         if (event.getQuantity() > 1) {
-            int remaining_rolls = brm.getRolls(uuid, reward_box_id) - event.getQuantity();
+            int remaining_rolls = brm.getRolls(uuid_string, reward_box_id) - event.getQuantity();
             if (remaining_rolls < 0) {
                 remaining_rolls = -remaining_rolls;
                 total_rolls = event.getQuantity() - remaining_rolls;
@@ -100,7 +100,7 @@ public class ConsumeRollEvent implements IEvent<Void> {
             }
         }
 
-        brm.decrementRolls(uuid, reward_box_id, total_rolls);
+        brm.decrementRolls(uuid_string, reward_box_id, total_rolls);
 
         CombinedItemContainer inventory = player.getInventory().getCombinedEverything();
 
