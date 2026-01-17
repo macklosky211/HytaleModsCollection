@@ -19,7 +19,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.katsi.rewardbox.BoxRollManager;
 import com.katsi.rewardbox.GlobalRewardBox;
-import com.katsi.rewardbox.events.ConsumeRollEvent;
+import com.katsi.rewardbox.events.GrantRollEvent;
 
 public class grantItemRoll extends AbstractCommand {
 
@@ -46,11 +46,6 @@ public class grantItemRoll extends AbstractCommand {
         String player_name = player_name_arg.get(context);
         String reward_box_id = reward_box_name_arg.get(context);
         Integer value = increment_value_arg.get(context);
-        
-        // if (GlobalRewardBox.getRewardBox(reward_box_id) == null) {
-        //     context.sender().sendMessage(Message.raw(String.format("[ERROR] Could not find any RewardBoxes with id '%s'", reward_box_id)));
-        //     return CompletableFuture.completedFuture(null);
-        // }
 
 
         PlayerRef target_playerRef = Universe.get().getPlayerByUsername(player_name, NameMatching.DEFAULT);
@@ -59,12 +54,10 @@ public class grantItemRoll extends AbstractCommand {
             return CompletableFuture.completedFuture(null);
         }
 
-        // Player target_player = target_playerRef.getHolder().getComponent(Player.getComponentType());
-
-        IEventDispatcher<ConsumeRollEvent, ConsumeRollEvent> dispatcher = HytaleServer.get().getEventBus().dispatchFor(ConsumeRollEvent.class);
+        IEventDispatcher<GrantRollEvent, GrantRollEvent> dispatcher = HytaleServer.get().getEventBus().dispatchFor(GrantRollEvent.class);
         
         if (dispatcher.hasListener()) {
-            ConsumeRollEvent event = new ConsumeRollEvent(target_playerRef, reward_box_id);
+            GrantRollEvent event = new GrantRollEvent(target_playerRef, reward_box_id, value);
             dispatcher.dispatch(event);
         }
 
