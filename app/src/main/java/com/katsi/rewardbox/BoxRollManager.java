@@ -4,22 +4,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 
 public class BoxRollManager {
     public static BoxRollManager instance;
 
-    HashMap<String, HashMap<String, Integer>> roll_access_table;
+    Map<String, Map<String, Double>> roll_access_table;
 
     protected BoxRollManager() {
         instance = this;
-        roll_access_table = new HashMap<String, HashMap<String, Integer>>(1);
+        roll_access_table = new LinkedTreeMap<String, Map<String, Double>>();
     }
 
 
@@ -27,7 +27,7 @@ public class BoxRollManager {
         return instance;
     }
 
-    public static HashMap<String, HashMap<String, Integer>> getRollAccessTable() {
+    public static Map<String, Map<String, Double>> getRollAccessTable() {
         return instance.roll_access_table;
     }
 
@@ -47,7 +47,7 @@ public class BoxRollManager {
     }
 
 
-    @SuppressWarnings({ "null", "unchecked" })
+    @SuppressWarnings( { "null", "unchecked" } )
     public static boolean load() {
         Gson gson = new Gson();
         String file_content = "";
@@ -61,6 +61,7 @@ public class BoxRollManager {
             return false;
         }
         
+        // Type type = new TypeToken<Map<String, Map<String, Double>>>() {}.getType();
         instance.roll_access_table = gson.fromJson(file_content, BoxRollManager.getRollAccessTable().getClass());
         return true;
     }
@@ -85,14 +86,14 @@ public class BoxRollManager {
         if (!this.hasRoll(uuid, reward_box_name)) {
             return 0;
         } else {
-            return this.roll_access_table.get(uuid).get(reward_box_name);
+            return this.roll_access_table.get(uuid).get(reward_box_name).intValue();
         }
     }
 
     public void setRolls(String uuid, String reward_box_name, int value) {
         if (value <= 0) {
             if (this.roll_access_table.containsKey(uuid)) {
-                HashMap<String, Integer> reward_map = this.roll_access_table.get(uuid);
+                Map<String, Double> reward_map = this.roll_access_table.get(uuid);
                 if (reward_map.containsKey(reward_box_name)) {
                     reward_map.remove(reward_box_name);
                     if (reward_map.isEmpty()) {
@@ -103,11 +104,11 @@ public class BoxRollManager {
             return;
         }
 
-        HashMap<String, Integer> reward_map = this.assertUUIDMap(uuid);
+        Map<String, Double> reward_map = this.assertUUIDMap(uuid);
         if (reward_map.containsKey(reward_box_name)) {
-            reward_map.replace(reward_box_name, Integer.valueOf(value));
+            reward_map.replace(reward_box_name, Double.valueOf(value));
         } else {
-            reward_map.put(reward_box_name, Integer.valueOf(value));
+            reward_map.put(reward_box_name, Double.valueOf(value));
         }
         
     }
@@ -122,11 +123,11 @@ public class BoxRollManager {
     }
 
     public void incrementRolls(String uuid, String reward_box_name, int value) {
-        HashMap<String, Integer> reward_map = this.assertUUIDMap(uuid);
+        Map<String, Double> reward_map = this.assertUUIDMap(uuid);
         if (reward_map.containsKey(reward_box_name)) {
-            reward_map.replace(reward_box_name, reward_map.get(reward_box_name) + Integer.valueOf(value));
+            reward_map.replace(reward_box_name, reward_map.get(reward_box_name) + Double.valueOf(value));
         } else {
-            reward_map.put(reward_box_name, Integer.valueOf(value));
+            reward_map.put(reward_box_name, Double.valueOf(value));
         }
     }
 
@@ -137,10 +138,10 @@ public class BoxRollManager {
     public void decrementRolls(String uuid, String reward_box_name, int value) {
 
         if (!this.roll_access_table.containsKey(uuid)) return;
-        HashMap<String, Integer> reward_map = this.roll_access_table.get(uuid);
+        Map<String, Double> reward_map = this.roll_access_table.get(uuid);
         if (!reward_map.containsKey(reward_box_name)) return;
 
-        Integer new_value = reward_map.get(reward_box_name) - Integer.valueOf(value);
+        Double new_value = reward_map.get(reward_box_name) - Double.valueOf(value);
         if (new_value <= 0) {
             reward_map.remove(reward_box_name); 
             if (reward_map.isEmpty()) { // if the player has no rolls left remove them to minimize save file space.
@@ -156,9 +157,9 @@ public class BoxRollManager {
     /**
      * Creates a UUID map for the specified uuid. If it already existed then it returns the existing object.
      */
-    protected HashMap<String, Integer> assertUUIDMap(String uuid) {
+    protected Map<String, Double> assertUUIDMap(String uuid) {
         if (!this.roll_access_table.containsKey(uuid)) {
-            HashMap<String, Integer> new_reward_map = new HashMap<String, Integer>(1);
+            Map<String, Double> new_reward_map = new LinkedTreeMap<String, Double>();
 
             this.roll_access_table.put(uuid, new_reward_map);
             return new_reward_map;
