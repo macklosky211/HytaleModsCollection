@@ -72,10 +72,16 @@ public class BoxRollManager {
 
     public boolean hasRoll(String uuid, String reward_box_name) {
         if (this.roll_access_table.containsKey(uuid)){
-            return this.roll_access_table.get(uuid).containsKey(reward_box_name);
-        } else {
-            return false;
+            Map<String, Double> key_map = this.roll_access_table.get(uuid);
+            if (key_map.containsKey(reward_box_name)) {
+                Double rolls = key_map.get(reward_box_name);
+                if (rolls < 0) {
+                    setRolls(uuid, reward_box_name, 0);
+                }
+                return (rolls > 0);
+            }
         }
+        return false;
     }
 
     public boolean hasAnyRolls(String uuid) {
