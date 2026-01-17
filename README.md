@@ -1,3 +1,5 @@
+This is a mod for Hytale.
+
 This mod adds the ability to create random 'loot-boxes'. 
 
 Standalone it only has /command functionalities, but as a api it adds the ability to trigger custom events to reward players with a 'loot-box'.
