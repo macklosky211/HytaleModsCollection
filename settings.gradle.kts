@@ -1,4 +1,4 @@
-rootProject.name = "DialyLoginReward"
+rootProject.name = "DailyLoginReward"
 
 plugins {
     // Apply the foojay-resolver plugin to allow automatic download of JDKs
