@@ -1,0 +1,21 @@
+{
+  "Group": "Katsi",
+  "Name": "DailyLoginReward",
+  "Version": "1.0.0",
+  "Description": "A mod that allows you to get rewarded for loging in every day.",
+  "Authors": [
+    {
+      "Name": "Katsi",
+      "Email": "theblackcatgang@gmail.com",
+      "Url": "https://legacy.curseforge.com/hytale/mods/dailyloginrewards"
+    }
+  ],
+  "Website": "",
+  "Main": "com.katsi.dailyloginreward.Main",
+  "ServerVersion": "*",
+  "Dependencies": {
+    "Katsi:RewardBoxes" : ">=1.0.2"
+  },
+  "OptionalDependencies": {},
+  "DisabledByDefault": false
+}
