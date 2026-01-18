@@ -6,15 +6,14 @@
   "Authors": [
     {
       "Name": "Katsi",
-      "Email": "your.email@example.com",
-      "Url": "https://your-website.com"
+      "Email": "theblackcatgang@gmail.com",
+      "Url": "https://legacy.curseforge.com/hytale/mods/katsilib"
     }
   ],
-  "Website": "https://github.com/yourusername/hytale-plugin-template",
+  "Website": "",
   "Main": "com.katsi.lib.Lib",
   "ServerVersion": "*",
-  "Dependencies": {
-  },
+  "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false
 }
