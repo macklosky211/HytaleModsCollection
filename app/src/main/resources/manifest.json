@@ -14,7 +14,8 @@
   "Main": "com.katsi.dailyloginreward.Main",
   "ServerVersion": "*",
   "Dependencies": {
-    "Katsi:RewardBoxes" : ">=1.0.2"
+    "Katsi:RewardBoxes" : ">=1.0.2",
+    "Katsi:Lib" : ">=1.0.0"
   },
   "OptionalDependencies": {},
   "DisabledByDefault": false
