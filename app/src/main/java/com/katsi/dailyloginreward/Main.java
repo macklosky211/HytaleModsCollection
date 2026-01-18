@@ -78,8 +78,8 @@ public class Main extends JavaPlugin {
         reward_keys_1.put("ExampleRewardBox", 1d);
         
         Map<String, Double> reward_2_items = new HashMap<String, Double>();
-        reward_2_items.put("Tool_Pickaxe_Bronze", 1d);
-        reward_2_items.put("Tool_Hatchet_Bronze", 1d);
+        reward_2_items.put("Tool_Pickaxe_Copper", 1d);
+        reward_2_items.put("Tool_Hatchet_Copper", 1d);
         
         Map<String, Double> reward_3_items = new HashMap<String, Double>();
         reward_3_items.put("Tool_Pickaxe_Iron", 1d);
