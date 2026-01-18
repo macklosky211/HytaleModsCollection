@@ -1,0 +1,20 @@
+{
+  "Group": "Katsi",
+  "Name": "Lib",
+  "Version": "1.0.0",
+  "Description": "A library for all of Katsi's mods.",
+  "Authors": [
+    {
+      "Name": "Katsi",
+      "Email": "your.email@example.com",
+      "Url": "https://your-website.com"
+    }
+  ],
+  "Website": "https://github.com/yourusername/hytale-plugin-template",
+  "Main": "com.katsi.lib.Lib",
+  "ServerVersion": "*",
+  "Dependencies": {
+  },
+  "OptionalDependencies": {},
+  "DisabledByDefault": false
+}
