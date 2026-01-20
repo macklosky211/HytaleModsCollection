@@ -16,7 +16,7 @@ public class ConfigManager {
     private HashMap<String, ConfigMap<?>> config_map;
     private Gson GSON;
 
-    private final String CONFIG_PATH = "config/KatsiLib/";
+    private final String CONFIG_PATH = "config/";
 
     public ConfigManager() {
         instance = this;
@@ -171,22 +171,45 @@ public class ConfigManager {
      * @return
      */
     private File getFile(String file_name) {
+        if (file_name.indexOf('/') == -1) { file_name = String.format("KatsiLib/%s", file_name); }
         File new_file = new File(CONFIG_PATH.concat(file_name));
         if (new_file.exists()) return new_file;
         else return null;
     }
 
     private File makeFile(String file_name) {
-        File new_file = new File(CONFIG_PATH.concat(file_name));
+
+        String file_path = file_name;
+
+        if (file_path.indexOf('/') == -1) {
+            file_path = String.format("KatsiLib/%s", file_name);
+            File katsi_lib_config_folder = new File(CONFIG_PATH.concat("KatsiLib"));
+            if (!katsi_lib_config_folder.exists()) { katsi_lib_config_folder.mkdirs(); }
+        } else {
+            String new_file_dir_path = file_path.substring(0, file_path.lastIndexOf('/'));
+            File new_file_path = new File(CONFIG_PATH.concat(new_file_dir_path));
+            if (!new_file_path.mkdirs()) {
+                System.err.println(String.format("[ERROR|KatsiLib] Failed to create directory for config: '%s'", file_name));
+                return null;
+            }
+        }
+
+        File new_file = new File(CONFIG_PATH.concat(file_path));
         if (new_file.exists()) return new_file; // File Already exist's.
         try {
             new_file.createNewFile();
             return new_file;
         } catch (IOException e) {
-            config_map.get(file_name).logger.atSevere().log(String.format("[ERROR|KatsiLib] Failed to create file '%s'", file_name));
+            if (config_map.get(file_path) != null && config_map.get(file_path).logger != null) {
+                config_map.get(file_path).logger.atSevere().log(String.format("[ERROR|KatsiLib] Failed to create file '%s'", file_path));
+            } else {
+                System.err.println(String.format("[ERROR|KatsiLib] Failed to create file '%s'", file_path));
+            }
+
             return null;
         }
     }
+
 
     /**
      * Creates a new ConfigMap and puts it in the global config_map.
